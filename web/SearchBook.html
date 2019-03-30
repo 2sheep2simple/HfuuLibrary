@@ -1,0 +1,84 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+    <title>搜索图书</title>
+</head>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/vue251.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<style>
+    tr,td{
+        border:1px solid black;
+    }
+</style>
+<body>
+<div id="app">
+    <div>
+      <input type="text" v-model="loginMsg.name" value="" placeholder="用户名">
+      <input type="text" v-model="loginMsg.password" value="" placeholder="密码">
+      <button @click="login">登陆</button>
+    </div>
+
+    <input type="text" name="name" value="" placeholder="输入关键字搜索..." >
+    <input type="button" value="搜索" @click="search">
+    <table>
+        <tr v-for="(item,index) in resultList"><!-- v-for 指令需要以 site in sites 形式的特殊语法， sites 是源数据数组并且 site 是数组元素迭代的别名。 -->
+            <td  width="5%">{{item.id}}</td>
+            <td  width="5%"><a @click="searchDetail(item.id);">{{item.name}}</a></td>
+            <td  width="5%">{{item.author}}</td>
+            <td  width="5%">{{item.press}}</td>
+            <td  width="5%">{{item.pressdate}}</td>
+        </tr>
+    </table>
+</div>
+    <script>
+            var vue = new Vue({
+                el:'#app',
+                data:{
+                    resultList:[],
+                    loginMsg:{},
+                },
+                methods:{
+                    search:function () {
+                        var name = $(" input[ name='name' ] ").val()
+                        if (name == null || name == ""){
+                            window.alert ("请继续填写 ！")
+                            return false
+                        }else {
+                            var reg = /^[\u4e00-\u9fa5]{1,10}$/;
+                            if (!reg.test(name)) {
+                                window.alert ("请输入关键字 ！")
+                                return false
+                            }
+                        }
+                        var self=this
+                        $.post('/Servlet', {name:name,msg:"0"}, function (data) {
+                            data = JSON.parse(data)
+                            self.resultList = data;
+                        }) // endwith post
+
+                    },
+                    searchDetail:function (id) {
+                        console.log("id:"+id)
+                        $.cookie('id',id);
+                        window.location.href="http://localhost:8080/BookDetail.html";
+                    },
+                    login:function () {
+                        var self = this
+                        var name = self.loginMsg.name;
+                        var password = self.loginMsg.password;
+                        console.log("登陆...."+name+password)
+                        $.post('/Servlet', {name:name,password:password,msg:"2"}, function (data) {
+                            console.log("callback"+data)
+                            if (data == 1){
+                                alert("恭喜，登陆成功！")
+                            }
+                        }) // endwith post
+
+                    }
+                }
+
+            })
+    </script>
+</body>
+</html>

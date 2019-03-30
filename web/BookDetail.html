@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书详情</title>
+</head>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/vue251.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<style>
+    td{
+        border: lightslategray solid 1px;
+        width: 80px;
+    }
+</style>
+<body>
+<div id="app">
+    <table>
+        <tr>
+            <td>书号:</td><td>{{bookId}}</td>
+        </tr>
+        <tr>
+            <td>书名:</td><td>{{bookName}}</td>
+        </tr>
+        <tr>
+            <td>所在位置:</td><td>{{bookAddress}}</td>
+        </tr>
+        <tr>
+            <td>是否在馆:</td><td>{{bookStatus}}</td>
+        </tr>
+        <tr>
+            <td>详细介绍:</td><td>{{bookDetail}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><button @click="borrow()">借书</button></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button @click="order()">申请预约</button></td>
+        </tr>
+    </table>
+</div>
+<script>
+     new Vue({
+        el:"#app",
+        data:{
+            loginMsg:{},
+            bookId:"",
+            bookName:"",
+            bookAddress:"",
+            bookStatus:"",
+            bookDetail:""
+        },
+        created: function () {
+            var self = this
+            var id = $.cookie('id');
+            console.log("cookie:"+id)
+            $.post('/Servlet', {id:id,msg:"1"}, function (data) {
+                data = JSON.parse(data)
+                self.bookId = data[0].id
+                self.bookName = data[0].name
+                self.bookAddress = data[0].address
+                self.bookStatus = data[0].status
+                self.bookDetail = data[0].detail
+            }) // endwith post
+        },
+        methods:{
+            borrow:function (bookId) {
+              console.log("借书")
+            },
+            order:function (boodId) {
+                console.log("预约")
+            }
+        }
+
+    })
+
+</script>
+
+</body>
+</html>
