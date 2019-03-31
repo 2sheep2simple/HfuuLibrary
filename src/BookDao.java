@@ -66,6 +66,22 @@ public class BookDao {
         return book;
     }
 
+    public static int borrow(String id) throws SQLException {
+        int ifUpdate = 0; // 默认未登陆
+        Connection conn = Util.getConn();
+        Statement stmt ;
+        String sql = "update book set status = '已出馆' where id = '"+id+"'";
+        System.out.println(sql);
+        try {
+            stmt = conn.prepareStatement(sql);
+            ifUpdate = stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ifUpdate;
+    }
+
+
 
 
 }

@@ -13,13 +13,13 @@
 </style>
 <body>
 <div id="app">
-    <div>
+    <div id="loginbox">
       <input type="text" v-model="loginMsg.name" value="" placeholder="用户名">
-      <input type="text" v-model="loginMsg.password" value="" placeholder="密码">
+      <input type="password" v-model="loginMsg.password" value="" placeholder="密码">
       <button @click="login">登陆</button>
     </div>
 
-    <input type="text" name="name" value="" placeholder="输入关键字搜索..." >
+    <input type="text" name="name" value="大" placeholder="输入关键字搜索..." >
     <input type="button" value="搜索" @click="search">
     <table>
         <tr v-for="(item,index) in resultList"><!-- v-for 指令需要以 site in sites 形式的特殊语法， sites 是源数据数组并且 site 是数组元素迭代的别名。 -->
@@ -59,8 +59,13 @@
 
                     },
                     searchDetail:function (id) {
-                        console.log("id:"+id)
-                        $.cookie('id',id);
+                        var self =  this
+                        var messageList ={
+                            id : id,
+                            status : self.loginMsg.status
+                        }
+                        console.log("id:"+id,"status"+self.loginMsg.status)
+                        $.cookie('messageList',JSON.stringify(messageList));
                         window.location.href="http://localhost:8080/BookDetail.html";
                     },
                     login:function () {
@@ -72,6 +77,8 @@
                             console.log("callback"+data)
                             if (data == 1){
                                 alert("恭喜，登陆成功！")
+                                self.loginMsg.status = "logined"
+                                $("#loginbox").hide();
                             }
                         }) // endwith post
 

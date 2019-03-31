@@ -62,5 +62,18 @@ public class Servlet extends HttpServlet {
 
         }
 
+        if(requestType.equals("3")){
+            UserDao userDao = new UserDao();
+            String id = request.getParameter("id");
+            try {
+                int ifUpdate = BookDao.borrow(id);
+                response.getWriter().println(ifUpdate);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 }

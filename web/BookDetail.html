@@ -32,10 +32,10 @@
             <td>详细介绍:</td><td>{{bookDetail}}</td>
         </tr>
         <tr>
-            <td colspan="2"><button @click="borrow()">借书</button></td>
+            <td colspan="2" id="borrowTr"><button @click="borrow()">借书</button></td>
         </tr>
         <tr>
-            <td colspan="2"><button @click="order()">申请预约</button></td>
+            <td colspan="2" id="orderTr"><button @click="order()">申请预约</button></td>
         </tr>
     </table>
 </div>
@@ -43,32 +43,68 @@
      new Vue({
         el:"#app",
         data:{
-            loginMsg:{},
             bookId:"",
             bookName:"",
             bookAddress:"",
             bookStatus:"",
-            bookDetail:""
+            bookDetail:"",
+            messageList:{}
         },
         created: function () {
             var self = this
-            var id = $.cookie('id');
-            console.log("cookie:"+id)
-            $.post('/Servlet', {id:id,msg:"1"}, function (data) {
+            self.messageList = $.cookie('messageList');
+           if (self.messageList){
+               self.messageList = JSON.parse(self.messageList);
+           }else {
+               console.log("传值失败...")
+               return false;
+           }
+            $.post('/Servlet', {id:self.messageList.id,msg:"1"}, function (data) {
                 data = JSON.parse(data)
                 self.bookId = data[0].id
                 self.bookName = data[0].name
                 self.bookAddress = data[0].address
                 self.bookStatus = data[0].status
                 self.bookDetail = data[0].detail
+                if (self.bookStatus == '在馆') {
+                    $("#orderTr").hide();
+                }else {
+                    $("#borrowTr").hide();
+                }
             }) // endwith post
+
+
         },
         methods:{
             borrow:function (bookId) {
-              console.log("借书")
+                var self = this
+                if(self.messageList.status == 'logined'){
+                    $.post('/Servlet', {id:self.messageList.id,msg:"3"}, function (data) {
+                        if (data == 1) {
+                            alert("借书成功 ！")
+                        }else {
+                            alert("网络错误...")
+                        }
+                    }) // endwith post
+                } else {
+                    alert("请先登录....")
+                    window.location.href="http://localhost:8080/SearchBook.html";
+                }
             },
             order:function (boodId) {
-                console.log("预约")
+                var self = this
+                if(self.messageList.status == 'logined'){
+                    $.post('/Servlet', {id:self.messageList.id,msg:"3"}, function (data) {
+                        if (data == 1) {
+                            alert("预约成功 ！")
+                        }else {
+                            alert("网络错误...")
+                        }
+                    }) // endwith post
+                } else {
+                    alert("请先登录....")
+                    window.location.href="http://localhost:8080/SearchBook.html";
+                }
             }
         }
 
