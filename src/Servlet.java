@@ -16,6 +16,7 @@ public class Servlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request,HttpServletResponse  response) throws javax.servlet.ServletException, IOException {
+
         /*设置字符编码*/
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
@@ -34,9 +35,7 @@ public class Servlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-        }
-
-        if (requestType.equals("1")){
+        } else if (requestType.equals("1")){
             BookDao bookDao = new BookDao();
             String id = request.getParameter("id");
             try {
@@ -47,9 +46,7 @@ public class Servlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-        }
-
-        if(requestType.equals("2")){
+        } else if(requestType.equals("2")){
             UserDao userDao = new UserDao();
             String name = request.getParameter("name");
             String password = request.getParameter("password");
@@ -60,9 +57,7 @@ public class Servlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-        }
-
-        if(requestType.equals("3")){
+        } else if(requestType.equals("3")){
             UserDao userDao = new UserDao();
             String id = request.getParameter("id");
             try {
