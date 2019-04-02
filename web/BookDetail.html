@@ -82,7 +82,9 @@
                 if(self.messageList.status == 'logined'){
                     $.post('/Servlet', {id:self.messageList.id,msg:"3"}, function (data) {
                         if (data == 1) {
-                            alert("借书成功 ！")
+                            alert("借书成功 ！");
+                            $.cookie('ifLogined','logined');
+                            window.location.href="http://localhost:8080/SearchBook.html";
                         }else {
                             alert("网络错误...")
                         }
@@ -97,7 +99,9 @@
                 if(self.messageList.status == 'logined'){
                     $.post('/Servlet', {id:self.messageList.id,msg:"3"}, function (data) {
                         if (data == 1) {
-                            alert("预约成功 ！")
+                            alert("预约成功 ！");
+                            $.cookie('ifLogined','logined');
+                            window.location.href="http://localhost:8080/SearchBook.html";
                         }else {
                             alert("网络错误...")
                         }
