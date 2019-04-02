@@ -12,9 +12,9 @@ public class Util {
 
     public static Connection getConn() {
         String DRIVER = "com.mysql.jdbc.Driver";
-        String URL = "jdbc:mysql://localhost:3306/library";
+        String URL = "jdbc:mysql://39.108.128.88:3306/library?useUnicode=true&characterEncoding=utf8";
         String USERNAME = "root";
-        String PASSWORD = "root";
+        String PASSWORD = "1q2w3E4!";
         Connection conn = null;
         try {
             Class.forName(DRIVER); //classLoader,加载对应驱动

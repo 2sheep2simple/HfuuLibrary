@@ -8,7 +8,8 @@
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <style>
     tr,td{
-        border:1px solid black;
+        border:1px solid darkgrey;
+        height: auto;
     }
 </style>
 <body>
@@ -19,7 +20,7 @@
       <button @click="login">登陆</button>
     </div>
 
-    <input type="text" name="name" value="大" placeholder="输入关键字搜索..." >
+    <input type="text" name="name" value="" placeholder="输入关键字搜索..." >
     <input type="button" value="搜索" @click="search">
     <table>
         <tr v-for="(item,index) in resultList"><!-- v-for 指令需要以 site in sites 形式的特殊语法， sites 是源数据数组并且 site 是数组元素迭代的别名。 -->
@@ -47,14 +48,18 @@
                         }else {
                             var reg = /^[\u4e00-\u9fa5]{1,10}$/;
                             if (!reg.test(name)) {
-                                window.alert ("请输入关键字 ！")
+                                window.alert ("请输入中文关键字 ！")
                                 return false
                             }
                         }
                         var self=this
                         $.post('/Servlet', {name:name,msg:"0"}, function (data) {
                             data = JSON.parse(data)
-                            self.resultList = data;
+                            if (data[0] != null) {
+                                self.resultList = data;
+                            }else {
+                                alert("抱歉，图书馆暂无此书...")
+                            }
                         }) // endwith post
 
                     },
@@ -72,6 +77,27 @@
                         var self = this
                         var name = self.loginMsg.name;
                         var password = self.loginMsg.password;
+                        if (name == null || name == ""){
+                            window.alert ("请填写您的账号 ！")
+                            return false
+                        }else {
+                            var reg = /^[A-Za-z]{1,10}$/;  // 账号为英文大小写字母，长度大于1且小于11
+                            if (!reg.test(name)) {
+                                window.alert ("请输入正确格式的账号 ！")
+                                return false
+                            }
+                        }
+                        if (password == null || password == ""){
+                            window.alert ("请输入密码 ！")
+                            return false
+                        }else {
+                            var reg = /^[A-Za-z0-9]{1,6}$/ // 密码为英文数字组成的字符串，长度1-6
+                            if (!reg.test(password)) {
+                                window.alert ("您的填写的密码含非法字符或，请重试... ！")
+                                self.loginMsg.password = '';
+                                return false
+                            }
+                        }
                         console.log("登陆...."+name+password)
                         $.post('/Servlet', {name:name,password:password,msg:"2"}, function (data) {
                             console.log("callback"+data)
@@ -79,6 +105,8 @@
                                 alert("恭喜，登陆成功！")
                                 self.loginMsg.status = "logined"
                                 $("#loginbox").hide();
+                            }else {
+                                alert("密码或账号错误请重试！")
                             }
                         }) // endwith post
 
