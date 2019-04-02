@@ -25,6 +25,8 @@ public class UserDao {
                     ifLogined = 1;
                 }
             }
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

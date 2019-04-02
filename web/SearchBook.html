@@ -124,6 +124,7 @@
                 created:function () {
                     var self = this
                     self.loginMsg.status = $.cookie('ifLogined')
+                    //alert(self.loginMsg.status)
                     if (self.loginMsg.status != null && self.loginMsg.status != '') {
                         $("#loginbox").hide();
                     }else {

@@ -22,6 +22,7 @@ public class Servlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         String requestType = request.getParameter("msg");
+        System.out.println("resultType:"+requestType);
 
         if (requestType.equals("0")){
             String name = request.getParameter("name");

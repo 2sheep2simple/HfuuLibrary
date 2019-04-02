@@ -35,6 +35,8 @@ public class BookDao {
                 System.out.println(rs.getInt("id")+rs.getString("name")+rs.getString("author"));
                 list.add(book);
             }
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,6 +62,8 @@ public class BookDao {
                 book.setDetail(rs.getString("detail"));
                 System.out.println(rs.getInt("id")+rs.getString("name")+rs.getString("status"));
             }
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +73,7 @@ public class BookDao {
     public static int borrow(String id) throws SQLException {
         int ifUpdate = 0; // 默认未登陆
         Connection conn = Util.getConn();
-        Statement stmt ;
+        Statement stmt = null ;
         String sql = "update book set status = '已出馆' where id = '"+id+"'";
         System.out.println(sql);
         try {
@@ -78,6 +82,8 @@ public class BookDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        stmt.close();
+        conn.close();
         return ifUpdate;
     }
 
